@@ -1,20 +1,24 @@
 'use client'
 
 interface PasswordInputProps {
+  children?: React.ReactNode;
   password: string;
-  onInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function PasswordInput({ password, onInput }: PasswordInputProps) {
+export default function PasswordInput({ children, password, disabled, onChange }: PasswordInputProps) {
   return (
-    <div className="mt-4 p-2 flex justify-between items-center bg-dark-grey md:mt-8 md:py-5 md:px-8 rounded-md border-2">
+    <div className="m-4 p-4 flex justify-between items-center rounded-md border-2">
       <input
-        className="w-full bg-transparent outline-none text-2xl text-almost-white font-bold placeholder:opacity-25 md:text-[32px]"
+        className="w-full bg-transparent text-2xl font-bold outline-none placeholder:opacity-75"
         placeholder="Password"
+        disabled={disabled === true ? true : false}
         value={password}
         data-testid='password-input-input'
-        onChange={(e) => onInput(e)}
+        onChange={(e) => onChange(e)}
       />
+      <div>{children}</div>
     </div>
   )
 }
