@@ -1,4 +1,13 @@
 http://localhost:8081 {
 	reverse_proxy /api/* localhost:8080
 	reverse_proxy /* localhost:3000
+
+    header /api/* {
+        Cache-Control max-age=600
+    }
+
+    encode {
+      zstd
+      gzip
+    }
 }
