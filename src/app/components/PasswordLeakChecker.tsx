@@ -38,6 +38,8 @@ export default function PasswordLeakChecker() {
     } catch (e) {
       console.error(e);
       setMatchStatus("❌")
+      console.error('Failed to fetch password information:', e);
+      setMatchStatus('❌');
     }
   }
 
