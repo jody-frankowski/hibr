@@ -20,21 +20,23 @@ export default function PasswordLeakChecker() {
       return;
     }
 
-    console.log(blake2b(newPassword, 256).then(console.log));
     try {
       const hashedPassword = await blake2b(newPassword, 256);
-      const res = fetch(
-        `api/v1/password/${encodeURIComponent(hashedPassword)}`
-      )
-        .then((res) => {
-          if (res.status === 200) {
-            setMatchStatus('😬');
-          } else if (res.status === 404) {
-            setMatchStatus('👍');
-          } else {
-            setMatchStatus('❌');
-          }
-        });
+      console.log(`Hash(${newPassword})=${hashedPassword}`);
+
+      const res = await fetch(
+        `api/v1/prefix/${encodeURIComponent(hashedPassword).slice(0, 4)}`
+      );
+      if (res.status === 200) {
+        const hashes = await res.json()
+        if (hashes.includes(hashedPassword)) {
+          setMatchStatus('😬');
+        } else {
+          setMatchStatus('👍')
+        }
+      } else {
+        setMatchStatus('❌');
+      }
     } catch (e) {
       console.error('Failed to fetch password information:', e);
       setMatchStatus('❌');
