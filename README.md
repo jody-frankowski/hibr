@@ -3,7 +3,7 @@
 Download the rockyou list:
 
 ```bash
-curl -O https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
+curl -LO https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
 ```
 
 Install the go dependencies:
