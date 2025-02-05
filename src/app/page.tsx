@@ -9,5 +9,5 @@ export default function Home() {
       <PasswordLeakChecker />
       <PasswordGenerator />
     </div>
-  )
+  );
 }
