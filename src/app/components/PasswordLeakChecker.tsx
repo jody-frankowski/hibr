@@ -24,7 +24,7 @@ export default function PasswordLeakChecker() {
     try {
       const hashedPassword = await blake2b(newPassword, 256);
       const res = fetch(
-        'api/v1/rockyou?' + new URLSearchParams({password: hashedPassword})
+        `api/v1/password/${encodeURIComponent(hashedPassword)}`
       )
         .then((res) => {
           if (res.status === 200) {
