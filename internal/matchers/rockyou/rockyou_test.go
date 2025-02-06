@@ -42,8 +42,14 @@ func TestMatches(t *testing.T) {
 			t.Parallel()
 
 			passwordHash := hash(test.input)
-			passwordHashHex := hex.EncodeToString(passwordHash[:])
-			if match, _ := rockYou.Matches(passwordHashHex); match != test.shouldMatch {
+			passwordHashHex := make([]byte, hashHexSize)
+			hex.Encode(passwordHashHex, passwordHash[:])
+
+			match, err := rockYou.Matches(passwordHashHex)
+			if err != nil {
+				t.Fatalf("Error matching password %s: %v", test.input, err)
+			}
+			if match != test.shouldMatch {
 				if test.shouldMatch {
 					t.Fatalf("%s: false negative", test.input)
 				} else {
@@ -78,7 +84,8 @@ func BenchmarkMatches(b *testing.B) {
 	for name, test := range tests {
 		b.Run(name, func(b *testing.B) {
 			passwordHash := hash(test.input)
-			passwordHashHex := hex.EncodeToString(passwordHash[:])
+			passwordHashHex := make([]byte, hashHexSize)
+			hex.Encode(passwordHashHex, passwordHash[:])
 
 			match, err := rockYou.Matches(passwordHashHex)
 			if err != nil {

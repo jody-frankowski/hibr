@@ -4,9 +4,15 @@ import (
 	"encoding/json"
 	"haveibeenrocked/internal/matchers/rockyou"
 	"log"
+	"time"
 
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
+)
+
+var (
+	prefixSize             = 4
+	msgInternalServerError = "Internal Server Error"
 )
 
 func main() {
@@ -15,19 +21,20 @@ func main() {
 		log.Fatalf("Error loading rockyou: %v", err)
 	}
 
-	handlePassword := func(ctx *fasthttp.RequestCtx) {
-		password := ctx.UserValue("password").(string)
-		if password == "" {
-			ctx.Error("Empty password parameter", fasthttp.StatusBadRequest)
+	handleHash := func(ctx *fasthttp.RequestCtx) {
+		hash := ctx.UserValue("hash").(string)
+		if hash == "" {
+			ctx.Error("Empty hash parameter", fasthttp.StatusBadRequest)
 			return
 		}
 
-		matches, err := rockYou.Matches(password)
+		matches, err := rockYou.Matches([]byte(hash))
 		if err != nil {
-			ctx.Error("Internal Server Error", fasthttp.StatusInternalServerError)
-			log.Printf("Error matching password %s: %v", password, err)
+			ctx.Error(msgInternalServerError, fasthttp.StatusInternalServerError)
+			log.Printf("Error matching hash %s: %v", hash, err)
 			return
 		}
+
 		if matches {
 			ctx.SetStatusCode(fasthttp.StatusOK)
 		} else {
@@ -37,14 +44,14 @@ func main() {
 
 	handlePrefix := func(ctx *fasthttp.RequestCtx) {
 		prefix := ctx.UserValue("prefix").(string)
-		if prefix == "" {
-			ctx.Error("Empty prefix parameter", fasthttp.StatusBadRequest)
+		if len(prefix) != prefixSize {
+			ctx.Error("Error: Prefix is too long or too short", fasthttp.StatusBadRequest)
 			return
 		}
 
-		hashes, err := rockYou.PrefixSearch(prefix)
+		hashes, err := rockYou.PrefixSearch([]byte(prefix))
 		if err != nil {
-			ctx.Error("Internal Server Error", fasthttp.StatusInternalServerError)
+			ctx.Error(msgInternalServerError, fasthttp.StatusInternalServerError)
 			log.Printf("Error searching prefix %s: %v", prefix, err)
 			return
 		}
@@ -52,21 +59,23 @@ func main() {
 		ctx.SetStatusCode(fasthttp.StatusOK)
 		ctx.Response.Header.SetCanonical([]byte("Content-Type"), []byte("application/json"))
 		if err = json.NewEncoder(ctx).Encode(hashes); err != nil {
+			ctx.Error(msgInternalServerError, fasthttp.StatusInternalServerError)
 			log.Printf("Error encoding hashes %v: %v", hashes, err)
-			ctx.Error("Internal Server Error", fasthttp.StatusInternalServerError)
 		}
 	}
 
 	r := router.New()
-	r.GET("/api/v1/password/{password}", handlePassword)
+	r.GET("/api/v1/hash/{hash}", handleHash)
 	r.GET("/api/v1/prefix/{prefix}", handlePrefix)
 
 	const address = "127.0.0.1:8080"
 	log.Printf("Starting server on %s", address)
 
+	// 10ms timeout (Actually responds in less than 1ms).
+	timeoutDuration := time.Duration(10 * 1000 * 1000)
 	err = fasthttp.ListenAndServe(
 		address,
-		fasthttp.TimeoutHandler(r.Handler, 1000000000000, "Timeout"),
+		fasthttp.TimeoutHandler(r.Handler, timeoutDuration, "Timeout"),
 	)
 	if err != nil {
 		log.Fatalf("Error starting server: %v", err)
