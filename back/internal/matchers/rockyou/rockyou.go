@@ -71,6 +71,15 @@ func hash(password string) Hash {
 }
 
 func (r *RockYou) loadData(fileName string) error {
+	txn := r.db.NewTransaction(false)
+	_, err := txn.Get(append([]byte("LOADED_STATUS:"), r.prefix...))
+	txn.Discard()
+	if err == nil {
+		return nil
+	} else if !errors.Is(err, badger.ErrKeyNotFound) {
+		return err
+	}
+
 	file, err := os.Open(fileName)
 	if err != nil {
 		return err
@@ -92,6 +101,10 @@ func (r *RockYou) loadData(fileName string) error {
 			return err
 		}
 	}
+	err = writeBatch.Set(append([]byte("LOADED_STATUS:"), r.prefix...), []byte{1})
+	if err != nil {
+		return err
+	}
 
 	return writeBatch.Flush()
 }
@@ -109,13 +122,14 @@ func New() (*RockYou, error) {
 	rockYou := RockYou{db, []byte("RY:")} // RY = RockYou
 
 	rockYouPath := os.Getenv("ROCKYOU_PATH")
-	if rockYouPath != "" {
-		err = rockYou.loadData(rockYouPath)
-		if err != nil {
-			return nil, err
-		}
-		log.Printf("%s loaded", rockYouPath)
+	if rockYouPath == "" {
+		rockYouPath = "rockyou.txt"
 	}
+	err = rockYou.loadData(rockYouPath)
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("%s loaded", rockYouPath)
 
 	// TODO Reopen with opt := badger.DefaultOptions("").WithInMemory(true)
 	// when it's loaded and saved to file?
