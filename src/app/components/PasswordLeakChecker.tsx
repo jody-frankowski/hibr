@@ -5,7 +5,7 @@ import PasswordInput from '@/app/components/PasswordInput';
 import { blake2b } from 'hash-wasm';
 import { Alert } from '@mui/material';
 
-type matchStatus = '' | '❌' | '😬' | '👍'
+type matchStatus = '' | '❌' | '😬' | '👍';
 
 // Top 100 passwords in RockYou according to the more realistic SecLists by OWASP
 // https://github.com/danielmiessler/SecLists/blob/fc9cbdfe8f8e5ae0505cd781f6a243239ddddd3f/Passwords/Common-Credentials/10-million-password-list-top-10000.txt#L1
@@ -110,7 +110,7 @@ const rockYouTop100 = [
   'thunder',
   'taylor',
   'matrix',
-]
+];
 
 export default function PasswordLeakChecker() {
   const [password, setPassword] = useState('');
@@ -135,14 +135,14 @@ export default function PasswordLeakChecker() {
       console.log(`Hash(${newPassword})=${hashedPassword}`);
 
       const res = await fetch(
-        `api/v1/prefix/${encodeURIComponent(hashedPassword).slice(0, 4)}`
+        `api/v1/prefix/${encodeURIComponent(hashedPassword).slice(0, 4)}`,
       );
       if (res.status === 200) {
-        const hashes = await res.json()
+        const hashes = await res.json();
         if (hashes.includes(hashedPassword)) {
           setMatchStatus('😬');
         } else {
-          setMatchStatus('👍')
+          setMatchStatus('👍');
         }
       } else {
         setMatchStatus('❌');
