@@ -15,7 +15,7 @@ go mod tidy
 Run the server:
 
 ```bash
-go run cmd/haveibeenrocked.go
+go run .
 ```
 
 Start the reverse proxy:
