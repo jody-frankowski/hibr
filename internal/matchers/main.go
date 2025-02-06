@@ -2,6 +2,6 @@ package matchers
 
 type Matcher interface {
 	Cleanup() error
-	Matches(string) (bool, error)
-	PrefixSearch(string) ([]string, error)
+	Matches([]byte) (bool, error)
+	PrefixSearch([]byte) ([]string, error)
 }

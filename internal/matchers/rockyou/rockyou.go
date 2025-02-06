@@ -11,6 +11,11 @@ import (
 	"golang.org/x/crypto/blake2b"
 )
 
+var (
+	hashSize    = 32
+	hashHexSize = hashSize * 2
+)
+
 type Hash = [32]byte
 
 type RockYou struct {
@@ -24,18 +29,13 @@ func (r *RockYou) Cleanup() error {
 	return r.db.Close()
 }
 
-func (r *RockYou) Matches(hash string) (bool, error) {
+func (r *RockYou) Matches(hash []byte) (bool, error) {
 	log.Printf("Hash Query: %s", hash)
 
 	txn := r.db.NewTransaction(false)
 	defer txn.Discard()
 
-	hashBytes, err := hex.DecodeString(hash)
-	if err != nil {
-		log.Printf("Error decoding hex hash %s: %v", hash, err)
-		return false, err
-	}
-	_, err = txn.Get(append(r.prefix, hashBytes...))
+	_, err := txn.Get(append(r.prefix, hash...))
 	if err == nil {
 		return true, nil
 	} else if errors.Is(err, badger.ErrKeyNotFound) {
@@ -45,16 +45,29 @@ func (r *RockYou) Matches(hash string) (bool, error) {
 	}
 }
 
-func (r *RockYou) PrefixSearch(prefix string) ([]string, error) {
-	return nil, nil
+func (r *RockYou) PrefixSearch(prefixToSearch []byte) ([]string, error) {
+	txn := r.db.NewTransaction(false)
+	defer txn.Discard()
+
+	opts := badger.DefaultIteratorOptions
+	opts.PrefetchValues = false
+	it := txn.NewIterator(opts)
+	defer it.Close()
+
+	hashes := make([]string, 0)
+	prefix := append(r.prefix, prefixToSearch...)
+	for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
+		key := it.Item().Key()
+		hash := string(key[len(r.prefix):])
+		hashes = append(hashes, hash)
+	}
+
+	log.Printf("Hashes Found: %v %v", len(hashes), hashes)
+	return hashes, nil
 }
 
 func hash(password string) Hash {
 	return blake2b.Sum256([]byte(password))
-}
-
-func hashChan(password string, c chan Hash) {
-	c <- hash(password)
 }
 
 func (r *RockYou) loadData(fileName string) error {
@@ -68,19 +81,22 @@ func (r *RockYou) loadData(fileName string) error {
 	}
 
 	file, err := os.Open(fileName)
-	defer file.Close()
 	if err != nil {
 		return err
 	}
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	writeBatch := r.db.NewWriteBatch()
 	defer writeBatch.Cancel()
+	passwordHashHex := make([]byte, hashHexSize)
 	// FIXME Breaks early if a line is over 64k chars (it's not a problem with our rockyou.txt)
 	for scanner.Scan() {
 		password := scanner.Text()
 		passwordHash := hash(password)
-		key := append(r.prefix, passwordHash[:]...)
+		hex.Encode(passwordHashHex, passwordHash[:])
+
+		key := append(r.prefix, passwordHashHex...)
 		if err := writeBatch.Set(key, []byte{}); err != nil {
 			return err
 		}
@@ -99,7 +115,7 @@ func New() (*RockYou, error) {
 		return nil, err
 	}
 
-	rockYou := RockYou{db, []byte("RYH:")} // RY = RockYou, H = Hash
+	rockYou := RockYou{db, []byte("RY:")} // RY = RockYou
 
 	err = rockYou.loadData("rockyou.txt")
 	if err != nil {
