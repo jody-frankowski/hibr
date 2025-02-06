@@ -1,3 +1,5 @@
 .idea/
 .dockerignore
 Dockerfile
+Makefile
+README.md
