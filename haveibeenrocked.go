@@ -69,7 +69,7 @@ func main() {
 	r.GET("/api/v1/hash/{hash}", handleHash)
 	r.GET("/api/v1/prefix/{prefix}", handlePrefix)
 
-	const address = "127.0.0.1:8080"
+	const address = "0.0.0.0:8080"
 	log.Printf("Starting server on %s", address)
 
 	// 1s timeout (Actually responds in less than 1ms).
