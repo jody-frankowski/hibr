@@ -8,11 +8,11 @@ interface PasswordInputProps {
 }
 
 export default function PasswordInput({
-                                        children,
-                                        password,
-                                        disabled,
-                                        onChange
-                                      }: PasswordInputProps) {
+  children,
+  password,
+  disabled,
+  onChange,
+}: PasswordInputProps) {
   return (
     <div className="m-4 p-4 flex justify-between items-center rounded-md border-2">
       <input

@@ -14,7 +14,9 @@ export default function CheckBox({ name, checked, onChange }: CheckBoxProps) {
         checked={checked}
         onChange={onChange}
       />
-      <label className="ml-2" htmlFor={name}>{name}</label>
+      <label className="ml-2" htmlFor={name}>
+        {name}
+      </label>
     </div>
   );
 }
