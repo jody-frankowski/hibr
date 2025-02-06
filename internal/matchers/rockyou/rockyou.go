@@ -110,7 +110,11 @@ func (r *RockYou) loadData(fileName string) error {
 }
 
 func New() (*RockYou, error) {
-	db, err := badger.Open(badger.DefaultOptions("/tmp/badger"))
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "/tmp/badger"
+	}
+	db, err := badger.Open(badger.DefaultOptions(dbPath))
 	if err != nil {
 		return nil, err
 	}
