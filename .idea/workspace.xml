@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_INJECTED_CODE" value="false" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bba477be-8bc0-462d-939d-5f8066e9c7c5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/haveibeenrocked.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/haveibeenrocked.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/matchers/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/matchers/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/matchers/rockyou/rockyou.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/matchers/rockyou/rockyou.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/matchers/rockyou/rockyou_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/matchers/rockyou/rockyou_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qodana.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/qodana.yaml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file:///opt/homebrew/opt/go/libexec" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;jody-frankowski&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:jody-frankowski/algosecure.git&quot;,
+    &quot;accountId&quot;: &quot;2f3a69f1-edeb-486e-bd6b-be33c34b706e&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/.cache/go/pkg/mod/github.com/dgraph-io/badger/v4@v4.5.1/batch.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/.cache/go/pkg/mod/github.com/dgraph-io/badger/v4@v4.5.1/options.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/.cache/go/pkg/mod/github.com/dgraph-io/badger/v4@v4.5.1/txn.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/.cache/go/pkg/mod/github.com/valyala/fasthttp@v1.58.0/client.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/.cache/go/pkg/mod/github.com/valyala/fasthttp@v1.58.0/server.go" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2sODM0BZj1memmFQt6zC7Gf4pm1" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go Build.Server.executor&quot;: &quot;Run&quot;,
+    &quot;Go Build.go build haveibeenrocked.executor&quot;: &quot;Run&quot;,
+    &quot;Go Build.go build haveibeenrocked/cmd.executor&quot;: &quot;Run&quot;,
+    &quot;Go Build.run.executor&quot;: &quot;Run&quot;,
+    &quot;Go Build.serve.executor&quot;: &quot;Run&quot;,
+    &quot;Go Build.server.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.BenchmarkMatches in haveibeenrocked/internal/matchers/rockyou.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.Test.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestMatches in haveibeenrocked/internal/rockyou.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.rockyou.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/me/Sync/job-assignments/algosecure&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.spelling&quot;
+  }
+}</component>
+  <component name="QodanaHighlightedReportService">
+    <option name="localRunNotPublishedPersistedInfo">
+      <LocalReportPersistedInfo>
+        <option name="path" value="/private/var/folders/8y/vt17xpwx5pg8y_dk_jjfqxfr0000gn/T/qodana_output/qodana.sarif.json" />
+        <option name="reportGuid" value="89183e89-11f7-4ebd-b860-ece88d578d85" />
+        <option name="reportName" value="algosecure/qodana/2025-02-06" />
+      </LocalReportPersistedInfo>
+    </option>
+  </component>
+  <component name="QodanaIsSelectedPersistenceService">
+    <option name="selectedOrLoading" value="true" />
+  </component>
+  <component name="QodanaReportsService">
+    <option name="descriptions">
+      <ReportDescription localRun="true" path="/private/var/folders/8y/vt17xpwx5pg8y_dk_jjfqxfr0000gn/T/qodana_output/qodana.sarif.json" reportGuid="89183e89-11f7-4ebd-b860-ece88d578d85" reportId="algosecure/qodana/2025-02-06" />
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="GoMoveDeclarationDialog.RECENT_KEY">
+      <recent name="$PROJECT_DIR$/internal/haveibeenrocked" />
+      <recent name="$PROJECT_DIR$/internal/router" />
+      <recent name="$PROJECT_DIR$/internal" />
+    </key>
+    <key name="GoExtractInterfaceDialog.RECENT_KEY">
+      <recent name="$PROJECT_DIR$/internal/matchers" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/" />
+      <recent name="$PROJECT_DIR$/internal/matchers/rockyou" />
+      <recent name="$PROJECT_DIR$/internal/rockyou/" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Test.Test">
+    <configuration name="Server" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
+      <module name="algosecure" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="haveibeenrocked/" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/cmd/haveibeenrocked.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="algosecure" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <kind value="PACKAGE" />
+      <package value="haveibeenrocked/internal/matchers/rockyou" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Go Build.Server" />
+      <item itemvalue="Go Test.Test" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.Server" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-gosdk-d297c17c1fbd-85c80fddc9a6-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-243.23654.166" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="GoTestRunConfiguration">
+        <watch expression="passwords[i+j]" language="go" />
+        <watch expression="hash" language="go" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/algosecure$run.out" NAME="run Coverage Results" MODIFIED="1738324651864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>
