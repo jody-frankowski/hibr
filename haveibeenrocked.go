@@ -20,6 +20,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading rockyou: %v", err)
 	}
+	log.Printf("DB started")
 
 	handleHash := func(ctx *fasthttp.RequestCtx) {
 		hash := ctx.UserValue("hash").(string)
