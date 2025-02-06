@@ -4,7 +4,7 @@ interface PasswordInputProps {
   children?: React.ReactNode;
   password: string;
   disabled?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function PasswordInput({
@@ -21,7 +21,7 @@ export default function PasswordInput({
         disabled={disabled === true ? true : false}
         value={password}
         data-testid="password-input-input"
-        onChange={(e) => onChange(e)}
+        onChange={(e) => onChange && onChange(e)}
       />
       <div>{children}</div>
     </div>
