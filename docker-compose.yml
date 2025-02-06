@@ -1,0 +1,35 @@
+services:
+  api:
+    container_name: haveibeenrocked-api
+    build: ./back
+    environment:
+      - DB_PATH=/db
+    volumes:
+      - db:/db
+    networks:
+      - app-network
+
+  nextjs:
+    container_name: haveibeenrocked-front
+    build: ./front
+    networks:
+      - app-network
+
+  rp:
+    image: caddy
+    container_name: caddy
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./rp:/etc/caddy
+      - rp:/data
+    networks:
+      - app-network
+
+volumes:
+  db:
+  rp:
+
+networks:
+  app-network:
+    driver: bridge
