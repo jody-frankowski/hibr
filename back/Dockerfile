@@ -12,6 +12,8 @@ RUN mkdir /db
 
 WORKDIR /app
 
+RUN wget https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
+
 COPY . .
 
 RUN go mod download
@@ -24,6 +26,7 @@ COPY --from=base /etc/passwd /etc/passwd
 COPY --from=base /etc/group /etc/group
 
 COPY --from=base /main .
+COPY --from=base --chown=go-user:go-user --chmod=700 /app/rockyou.txt .
 
 ENV DB_PATH=/db
 COPY --from=base --chown=go-user:go-user --chmod=700 /db/ /db/
