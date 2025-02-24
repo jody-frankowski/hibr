@@ -74,7 +74,5 @@ curl -sf http://localhost:8080/api/v1/hash/"${hash}" && echo Found || echo Not f
 
 ## TODOs
 
-- DB
-  - Use 128 bits hash?
 - Tests
     - E&E tests
