@@ -92,6 +92,6 @@ func main() {
 
 	// FIXME Never reached because we stop the server with SIGINT
 	if err = rockYou.Cleanup(); err != nil {
-		log.Fatalf("Error cleaning up rockyou: %v", err)
+		log.Fatalf("Error stopping RockYou DB: %v", err)
 	}
 }

@@ -113,6 +113,7 @@ func hash(password []byte) []byte {
 }
 
 func (r *RockYou) loadData(rockYou io.Reader) error {
+	// Check if the data is already loaded
 	txn := r.db.NewTransaction(false)
 	_, err := txn.Get(append([]byte("LOADED_STATUS:"), r.prefix...))
 	txn.Discard()
@@ -134,6 +135,8 @@ func (r *RockYou) loadData(rockYou io.Reader) error {
 			return err
 		}
 	}
+
+	// Set the key that indicates that the data is loaded
 	err = writeBatch.Set(append([]byte("LOADED_STATUS:"), r.prefix...), []byte{1})
 	if err != nil {
 		return err
