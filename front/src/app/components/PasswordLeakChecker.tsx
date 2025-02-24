@@ -126,6 +126,7 @@ export default function PasswordLeakChecker() {
     }
 
     if (rockYouTop100.includes(newPassword)) {
+      console.log(`rockYouTop100 hit: ${newPassword}`);
       setMatchStatus('😬');
       return;
     }
