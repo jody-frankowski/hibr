@@ -2,6 +2,7 @@ package rockyou
 
 import (
 	"bufio"
+	"encoding/binary"
 	"encoding/hex"
 	"errors"
 	"log"
@@ -43,17 +44,29 @@ func getRockYouFilePath() string {
 	return rockYouPath
 }
 
+func hexEncode(hash []byte) []byte {
+	hexHash := make([]byte, hashNbBytesHex)
+	hex.Encode(hexHash, hash)
+	return hexHash
+}
+
 func (r *RockYou) Cleanup() error {
 	return r.db.Close()
 }
 
-func (r *RockYou) Matches(hash []byte) (bool, error) {
-	log.Printf("Hash Query: %s", hash)
+// Matches returns true if the hash is found in the RockYou database.
+func (r *RockYou) Matches(hashHex []byte) (bool, error) {
+	log.Printf("Hash Query: %s", hashHex)
 
 	txn := r.db.NewTransaction(false)
 	defer txn.Discard()
 
-	_, err := txn.Get(append(r.prefix, hash...))
+	hash, err := hex.DecodeString(string(hashHex))
+	if err != nil {
+		return false, err
+	}
+
+	_, err = txn.Get(append(r.prefix, hash...))
 	if err == nil {
 		return true, nil
 	} else if errors.Is(err, badger.ErrKeyNotFound) {
@@ -63,7 +76,7 @@ func (r *RockYou) Matches(hash []byte) (bool, error) {
 	}
 }
 
-func (r *RockYou) PrefixSearch(prefixToSearch []byte) ([]string, error) {
+func (r *RockYou) PrefixSearch(prefixToSearchHex []byte) ([]string, error) {
 	txn := r.db.NewTransaction(false)
 	defer txn.Discard()
 
@@ -72,12 +85,18 @@ func (r *RockYou) PrefixSearch(prefixToSearch []byte) ([]string, error) {
 	it := txn.NewIterator(opts)
 	defer it.Close()
 
+	prefixToSearch, err := hex.DecodeString(string(prefixToSearchHex))
+	if err != nil {
+		return nil, err
+	}
+
+	hash := make([]byte, hashNbBytesHex)
 	hashes := make([]string, 0)
 	prefix := append(r.prefix, prefixToSearch...)
 	for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
 		key := it.Item().Key()
-		hash := string(key[len(r.prefix):])
-		hashes = append(hashes, hash)
+		hex.Encode(hash, key[len(r.prefix):])
+		hashes = append(hashes, string(hash))
 	}
 
 	log.Printf("Hashes Found: %v %v", len(hashes), hashes)
@@ -105,14 +124,11 @@ func (r *RockYou) loadData(rockYou io.Reader) error {
 	scanner := bufio.NewScanner(rockYou)
 	writeBatch := r.db.NewWriteBatch()
 	defer writeBatch.Cancel()
-	passwordHashHex := make([]byte, hashHexSize)
+
 	// FIXME Breaks early if a line is over 64k chars (it's not a problem with our rockyou.txt)
 	for scanner.Scan() {
-		password := scanner.Text()
-		passwordHash := hash(password)
-		hex.Encode(passwordHashHex, passwordHash[:])
-
-		key := append(r.prefix, passwordHashHex...)
+		password := scanner.Bytes()
+		key := append(r.prefix, hash(password)...)
 		if err := writeBatch.Set(key, []byte{}); err != nil {
 			return err
 		}
