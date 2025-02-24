@@ -24,9 +24,9 @@ type RockYou struct {
 }
 
 func GetDBPath() string {
-	dbPath := os.Getenv("DB_PATH")
+	dbPath := os.Getenv("ROCKYOU_DB_PATH")
 	if dbPath == "" {
-		dbPath = "/tmp/badger"
+		dbPath = "/tmp/rockyou-db"
 	}
 	return dbPath
 }
