@@ -22,7 +22,7 @@ func main() {
 	}
 	dbPath := rockyou.GetDBPath()
 
-	rockYou, err := rockyou.New(rockYouFile, dbPath)
+	rockYou, err := rockyou.New(rockYouFile, dbPath, false)
 	_ = rockYouFile.Close()
 	if err != nil {
 		log.Fatalf("Error loading RockYou file or DB: %v", err)

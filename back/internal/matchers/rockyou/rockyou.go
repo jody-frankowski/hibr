@@ -125,8 +125,13 @@ func (r *RockYou) loadData(rockYou io.Reader) error {
 	return writeBatch.Flush()
 }
 
-	db, err := badger.Open(badger.DefaultOptions(dbPath))
-func New(rockYouFile io.Reader, dbPath string) (*RockYou, error) {
+func New(rockYouFile io.Reader, dbPath string, inMemory bool) (*RockYou, error) {
+	badgerOptions := badger.DefaultOptions(dbPath)
+	if inMemory {
+		badgerOptions = badger.DefaultOptions("").WithInMemory(true)
+	}
+	badgerOptions = badgerOptions.WithMetricsEnabled(false).WithLoggingLevel(badger.WARNING)
+	db, err := badger.Open(badgerOptions)
 	if err != nil {
 		return nil, err
 	}
