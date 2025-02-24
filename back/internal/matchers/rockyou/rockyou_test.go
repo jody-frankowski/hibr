@@ -157,3 +157,18 @@ func BenchmarkMatches(b *testing.B) {
 		})
 	}
 }
+
+func BenchmarkHash(b *testing.B) {
+	b.Run("Short Password", func(b *testing.B) {
+		for b.Loop() {
+			hash([]byte("password"))
+		}
+	})
+
+	b.Run("Long Password", func(b *testing.B) {
+		for b.Loop() {
+			hash([]byte("This is a very long password to hash. " +
+					"It's probably longer than yours ;) Really, it's a really long one!!!!!!!!"))
+		}
+	})
+}
