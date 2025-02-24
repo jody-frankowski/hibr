@@ -8,15 +8,13 @@ import (
 	"os"
 
 	"github.com/dgraph-io/badger/v4"
-	"golang.org/x/crypto/blake2b"
+	"github.com/zeebo/xxh3"
 )
 
 var (
-	hashSize    = 32
-	hashHexSize = hashSize * 2
+	hashNbBytes    = 16
+	hashNbBytesHex = hashNbBytes * 2
 )
-
-type Hash = [32]byte
 
 type RockYou struct {
 	db *badger.DB
@@ -66,8 +64,12 @@ func (r *RockYou) PrefixSearch(prefixToSearch []byte) ([]string, error) {
 	return hashes, nil
 }
 
-func hash(password string) Hash {
-	return blake2b.Sum256([]byte(password))
+func hash(password []byte) []byte {
+	hash := xxh3.Hash128(password)
+	buf := make([]byte, hashNbBytes)
+	binary.BigEndian.PutUint64(buf[:8], hash.Hi)
+	binary.BigEndian.PutUint64(buf[8:], hash.Lo)
+	return buf
 }
 
 func (r *RockYou) loadData(fileName string) error {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import PasswordInput from '@/app/components/PasswordInput';
-import { blake2b } from 'hash-wasm';
+import { xxhash128 } from 'hash-wasm';
 import { Alert } from '@mui/material';
 
 type matchStatus = '' | '❌' | '😬' | '👍';
@@ -131,7 +131,7 @@ export default function PasswordLeakChecker() {
     }
 
     try {
-      const hashedPassword = await blake2b(newPassword, 256);
+      const hashedPassword = await xxhash128(newPassword);
       console.log(`Hash(${newPassword})=${hashedPassword}`);
 
       const res = await fetch(
