@@ -16,10 +16,18 @@ var (
 )
 
 func main() {
-	rockYou, err := rockyou.New()
+	rockYouFile, err := rockyou.GetRockYouFile()
 	if err != nil {
-		log.Fatalf("Error loading rockyou: %v", err)
+		log.Fatalf("Error opening RockYou file: %v", err)
 	}
+	dbPath := rockyou.GetDBPath()
+
+	rockYou, err := rockyou.New(rockYouFile, dbPath)
+	_ = rockYouFile.Close()
+	if err != nil {
+		log.Fatalf("Error loading RockYou file or DB: %v", err)
+	}
+
 	log.Printf("DB started")
 
 	handleHash := func(ctx *fasthttp.RequestCtx) {

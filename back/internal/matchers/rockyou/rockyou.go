@@ -23,6 +23,26 @@ type RockYou struct {
 	prefix []byte
 }
 
+func GetDBPath() string {
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "/tmp/badger"
+	}
+	return dbPath
+}
+
+func GetRockYouFile() (*os.File, error) {
+	return os.Open(getRockYouFilePath())
+}
+
+func getRockYouFilePath() string {
+	rockYouPath := os.Getenv("ROCKYOU_PATH")
+	if rockYouPath == "" {
+		rockYouPath = "rockyou.txt"
+	}
+	return rockYouPath
+}
+
 func (r *RockYou) Cleanup() error {
 	return r.db.Close()
 }
@@ -72,7 +92,7 @@ func hash(password []byte) []byte {
 	return buf
 }
 
-func (r *RockYou) loadData(fileName string) error {
+func (r *RockYou) loadData(rockYou io.Reader) error {
 	txn := r.db.NewTransaction(false)
 	_, err := txn.Get(append([]byte("LOADED_STATUS:"), r.prefix...))
 	txn.Discard()
@@ -82,13 +102,7 @@ func (r *RockYou) loadData(fileName string) error {
 		return err
 	}
 
-	file, err := os.Open(fileName)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(rockYou)
 	writeBatch := r.db.NewWriteBatch()
 	defer writeBatch.Cancel()
 	passwordHashHex := make([]byte, hashHexSize)
@@ -111,27 +125,19 @@ func (r *RockYou) loadData(fileName string) error {
 	return writeBatch.Flush()
 }
 
-func New() (*RockYou, error) {
-	dbPath := os.Getenv("DB_PATH")
-	if dbPath == "" {
-		dbPath = "/tmp/badger"
-	}
 	db, err := badger.Open(badger.DefaultOptions(dbPath))
+func New(rockYouFile io.Reader, dbPath string) (*RockYou, error) {
 	if err != nil {
 		return nil, err
 	}
 
 	rockYou := RockYou{db, []byte("RY:")} // RY = RockYou
 
-	rockYouPath := os.Getenv("ROCKYOU_PATH")
-	if rockYouPath == "" {
-		rockYouPath = "rockyou.txt"
-	}
-	err = rockYou.loadData(rockYouPath)
+	err = rockYou.loadData(rockYouFile)
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("%s loaded", rockYouPath)
+	log.Printf("RockYou loaded")
 
 	// TODO Reopen with opt := badger.DefaultOptions("").WithInMemory(true)
 	// when it's loaded and saved to file?
