@@ -40,7 +40,7 @@ func Test(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Error opening RockYou file: %v", err)
 	}
-	rockYou, err := New(rockYouFile, "/tmp/rockyou-db-tests", false)
+	rockYou, err := New(rockYouFile, "/tmp/rockyou-db-tests")
 	if err != nil {
 		t.Fatalf("Error loading RockYou DB: %v", err)
 	}
@@ -100,7 +100,7 @@ func BenchmarkNew(b *testing.B) {
 
 	b.Run("New", func(b *testing.B) {
 		for b.Loop() {
-			rockYou, err := New(rockYouFile, "/tmp/rockyou-db-tests", true)
+			rockYou, err := New(rockYouFile, "")
 			if err != nil {
 				b.Fatalf("Error loading RockYou DB: %v", err)
 			}
@@ -137,7 +137,7 @@ func BenchmarkMatches(b *testing.B) {
 	if err != nil {
 		b.Fatalf("Error opening RockYou file %s: %v", getRockYouFilePath(), err)
 	}
-	rockYou, err := New(rockYouFile, "/tmp/rockyou-db-tests", true)
+	rockYou, err := New(rockYouFile, "")
 	if err != nil {
 		b.Fatalf("Error loading RockYou DB: %v", err)
 	}

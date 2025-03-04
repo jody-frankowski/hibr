@@ -146,9 +146,9 @@ func (r *RockYou) loadData(rockYou io.Reader) error {
 	return writeBatch.Flush()
 }
 
-func New(rockYouFile io.Reader, dbPath string, inMemory bool) (*RockYou, error) {
+func New(rockYouFile io.Reader, dbPath string) (*RockYou, error) {
 	badgerOptions := badger.DefaultOptions(dbPath).WithLoggingLevel(badger.WARNING)
-	if inMemory {
+	if dbPath == "" {
 		badgerOptions = badger.DefaultOptions("").WithInMemory(true)
 	}
 
