@@ -164,8 +164,5 @@ func New(rockYouFile io.Reader, dbPath string, inMemory bool) (*RockYou, error) 
 	}
 	log.Printf("RockYou loaded")
 
-	// TODO Reopen with opt := badger.DefaultOptions("").WithInMemory(true)
-	// when it's loaded and saved to file?
-
 	return &rockYou, nil
 }
