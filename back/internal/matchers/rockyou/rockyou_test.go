@@ -129,6 +129,10 @@ func BenchmarkNew(b *testing.B) {
 }
 
 func BenchmarkMatches(b *testing.B) {
+	// Suppress logs to avoid stdout output during the benchmark
+	log.SetFlags(0)
+	log.SetOutput(io.Discard)
+
 	rockYouFile, err := GetRockYouFile()
 	if err != nil {
 		b.Fatalf("Error opening RockYou file %s: %v", getRockYouFilePath(), err)
