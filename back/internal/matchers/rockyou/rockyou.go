@@ -131,7 +131,7 @@ func (r *RockYou) loadData(rockYou io.Reader) error {
 	for scanner.Scan() {
 		password := scanner.Bytes()
 		key := append(r.prefix, hash(password)...)
-		if err := writeBatch.Set(key, []byte{}); err != nil {
+		if err := writeBatch.Set(key, nil); err != nil {
 			return err
 		}
 	}
