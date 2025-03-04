@@ -24,10 +24,10 @@ var (
 		"Empty Password":     {"", true},
 		"Longest Empty Line": {"                  ", true},
 		"Longest Line": {"<div align=\\\\\\\\\\\\'center\\\\\\\\\\\\' style=\\\\\\\\\\\\'font:bold" +
-				" 11px Verdana; width:310px\\\\\\\\\\\\'><a style=\\\\\\\\\\\\'background-color:#eeeeee" +
-				";display:block;width:310px;border:solid 2px black; padding:5px\\\\\\\\\\\\' href" +
-				"=\\\\\\\\\\\\'http://www.musik-live." +
-				"net\\\\\\\\\\\\' target=\\\\\\\\\\\\'_blank\\\\\\\\\\\\'>Playing/Tangga", true},
+			" 11px Verdana; width:310px\\\\\\\\\\\\'><a style=\\\\\\\\\\\\'background-color:#eeeeee" +
+			";display:block;width:310px;border:solid 2px black; padding:5px\\\\\\\\\\\\' href" +
+			"=\\\\\\\\\\\\'http://www.musik-live." +
+			"net\\\\\\\\\\\\' target=\\\\\\\\\\\\'_blank\\\\\\\\\\\\'>Playing/Tangga", true},
 		"Not In The List": {"DoesNotExistInRockYou", false},
 	}
 )
@@ -172,7 +172,7 @@ func BenchmarkHash(b *testing.B) {
 	b.Run("Long Password", func(b *testing.B) {
 		for b.Loop() {
 			hash([]byte("This is a very long password to hash. " +
-					"It's probably longer than yours ;) Really, it's a really long one!!!!!!!!"))
+				"It's probably longer than yours ;) Really, it's a really long one!!!!!!!!"))
 		}
 	})
 }
