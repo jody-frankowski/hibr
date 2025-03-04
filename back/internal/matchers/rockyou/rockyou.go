@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"github.com/dgraph-io/badger/v4"
+	"github.com/dgraph-io/badger/v4/options"
 	"github.com/zeebo/xxh3"
 )
 
@@ -146,11 +147,22 @@ func (r *RockYou) loadData(rockYou io.Reader) error {
 }
 
 func New(rockYouFile io.Reader, dbPath string, inMemory bool) (*RockYou, error) {
-	badgerOptions := badger.DefaultOptions(dbPath)
+	badgerOptions := badger.DefaultOptions(dbPath).WithLoggingLevel(badger.WARNING)
 	if inMemory {
 		badgerOptions = badger.DefaultOptions("").WithInMemory(true)
 	}
-	badgerOptions = badgerOptions.WithMetricsEnabled(false).WithLoggingLevel(badger.WARNING)
+
+	// Because our values are stored inline with the keys,
+	// we don't need the value log to have a large pre-allocated size.
+	// Set value log size to the minimum of 2MB.
+	badgerOptions = badgerOptions.WithValueLogFileSize(1 << 20)
+	// Set ZSTD compression instead of the Snappy default (~36MB smaller)
+	badgerOptions = badgerOptions.WithCompression(options.ZSTD)
+	// Use the maximum block size allowed. (~8MB smaller)
+	badgerOptions = badgerOptions.WithBlockSize(16 * 1024)
+	// Disable metrics
+	badgerOptions = badgerOptions.WithMetricsEnabled(false)
+
 	db, err := badger.Open(badgerOptions)
 	if err != nil {
 		return nil, err
