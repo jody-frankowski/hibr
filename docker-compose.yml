@@ -18,6 +18,9 @@ services:
   rp:
     image: caddy
     container_name: caddy
+    environment:
+      - BACK_HOST=hibr-api
+      - FRONT_HOST=hibr-front
     ports:
       - "8081:8081"
     volumes:
