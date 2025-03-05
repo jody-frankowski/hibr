@@ -1,6 +1,6 @@
 services:
   api:
-    container_name: haveibeenrocked-api
+    container_name: hibr-api
     build: ./back
     environment:
       - DB_PATH=/db
@@ -9,8 +9,8 @@ services:
     networks:
       - app-network
 
-  nextjs:
-    container_name: haveibeenrocked-front
+  front:
+    container_name: hibr-front
     build: ./front
     networks:
       - app-network
