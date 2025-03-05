@@ -1,13 +1,15 @@
-	reverse_proxy /api/* haveibeenrocked-api:8080
-	reverse_proxy /* haveibeenrocked-front:3000
 localhost:8081 127.0.0.1:8081 [::1]:8081 {
+	log
 
-    header /api/* {
-        Cache-Control max-age=600
-    }
+	reverse_proxy /api/* {$BACK_HOST:localhost}:8080
+	reverse_proxy /* {$FRONT_HOST:localhost}:3000
 
-    encode {
-      zstd
-      gzip
-    }
+	header /api/* {
+		Cache-Control max-age=600
+	}
+
+	encode {
+		zstd
+		gzip
+	}
 }
