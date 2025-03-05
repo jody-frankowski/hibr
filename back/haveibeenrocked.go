@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"haveibeenrocked/internal/matchers/rockyou"
 	"log"
 	"time"
@@ -11,8 +13,11 @@ import (
 )
 
 var (
-	prefixSize             = 4
-	msgInternalServerError = "Internal Server Error"
+	prefixSize            = 4
+	errorEmptyHashParam   = "Empty hash parameter"
+	errorInternalServer   = "Error: Internal Server Error"
+	errorOddLengthHashHex = "Error: Hex hash parameter has an invalid odd length"
+	errorWrongPrefixSize  = "Error: Wrong prefix size"
 )
 
 func main() {
@@ -25,7 +30,7 @@ func main() {
 	rockYou, err := rockyou.New(rockYouFile, dbPath)
 	_ = rockYouFile.Close()
 	if err != nil {
-		log.Fatalf("Error loading RockYou file or DB: %v", err)
+		log.Fatalf("Error starting RockYou DB: %v", err)
 	}
 
 	log.Printf("DB started")
@@ -33,15 +38,20 @@ func main() {
 	handleHash := func(ctx *fasthttp.RequestCtx) {
 		hash := ctx.UserValue("hash").(string)
 		if hash == "" {
-			ctx.Error("Empty hash parameter", fasthttp.StatusBadRequest)
+			ctx.Error(errorEmptyHashParam, fasthttp.StatusBadRequest)
 			return
 		}
 
 		matches, err := rockYou.Matches([]byte(hash))
 		if err != nil {
-			ctx.Error(msgInternalServerError, fasthttp.StatusInternalServerError)
 			log.Printf("Error matching hash %s: %v", hash, err)
-			return
+			if errors.Is(err, hex.ErrLength) {
+				ctx.Error(errorOddLengthHashHex, fasthttp.StatusBadRequest)
+				return
+			} else {
+				ctx.Error(errorInternalServer, fasthttp.StatusInternalServerError)
+				return
+			}
 		}
 
 		if matches {
@@ -54,13 +64,13 @@ func main() {
 	handlePrefix := func(ctx *fasthttp.RequestCtx) {
 		prefix := ctx.UserValue("prefix").(string)
 		if len(prefix) != prefixSize {
-			ctx.Error("Error: Prefix is too long or too short", fasthttp.StatusBadRequest)
+			ctx.Error(errorWrongPrefixSize, fasthttp.StatusBadRequest)
 			return
 		}
 
 		hashes, err := rockYou.PrefixSearch([]byte(prefix))
 		if err != nil {
-			ctx.Error(msgInternalServerError, fasthttp.StatusInternalServerError)
+			ctx.Error(errorInternalServer, fasthttp.StatusInternalServerError)
 			log.Printf("Error searching prefix %s: %v", prefix, err)
 			return
 		}
@@ -68,7 +78,7 @@ func main() {
 		ctx.SetStatusCode(fasthttp.StatusOK)
 		ctx.Response.Header.SetCanonical([]byte("Content-Type"), []byte("application/json"))
 		if err = json.NewEncoder(ctx).Encode(hashes); err != nil {
-			ctx.Error(msgInternalServerError, fasthttp.StatusInternalServerError)
+			ctx.Error(errorInternalServer, fasthttp.StatusInternalServerError)
 			log.Printf("Error encoding hashes %v: %v", hashes, err)
 		}
 	}
