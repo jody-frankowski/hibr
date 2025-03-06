@@ -71,8 +71,3 @@ password="password"
 hash="$(python -c "import hashlib; print(hashlib.blake2b(b'${password}', digest_size=32).hexdigest())")"
 curl -sf http://localhost:8080/api/v1/hash/"${hash}" && echo Found || echo Not found
 ```
-
-## TODOs
-
-- Tests
-    - E&E tests
