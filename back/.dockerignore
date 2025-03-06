@@ -1,5 +1,5 @@
-.idea/
 .dockerignore
+.idea/
 Dockerfile
 Makefile
 README.md
