@@ -8,12 +8,14 @@ services:
       - db:/db
     networks:
       - app-network
+    restart: unless-stopped
 
   front:
     container_name: hibr-front
     build: ./front
     networks:
       - app-network
+    restart: unless-stopped
 
   rp:
     image: caddy
@@ -28,6 +30,7 @@ services:
       - rp:/data
     networks:
       - app-network
+    restart: unless-stopped
 
 volumes:
   db:
