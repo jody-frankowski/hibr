@@ -1,4 +1,4 @@
-# Have I Been Rocked? API
+# Have I Been Rocked? Back
 
 ## Usage
 
@@ -37,13 +37,13 @@ go test ./...
 Build the image:
 
 ```shell
-docker build -t haveibeenrocked-api .
+docker build -t hibr-back .
 ```
 
 Run the container:
 
 ```shell
-docker run -p 8080:8080 haveibeenrocked-api
+docker run -p 8080:8080 hibr-back
 ```
 
 ## API Docs
