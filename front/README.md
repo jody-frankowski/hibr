@@ -17,11 +17,11 @@ npm run dev
 Build the image:
 
 ```shell
-docker build -t haveibeenrocked-front .
+docker build -t hibr-front .
 ```
 
 Run the container:
 
 ```shell
-docker run -p 8080:8080 haveibeenrocked-front
+docker run -p 8080:8080 hibr-front
 ```

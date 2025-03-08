@@ -1,6 +1,6 @@
 services:
-  api:
-    container_name: hibr-api
+  back:
+    container_name: hibr-back
     build: ./back
     environment:
       - DB_PATH=/db
