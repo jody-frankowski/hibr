@@ -1,5 +1,7 @@
 FROM node:22-alpine AS builder
 
+ENV NEXT_TELEMETRY_DISABLED=1
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -10,17 +12,8 @@ COPY . .
 
 RUN npm run build
 
-FROM node:22-alpine AS runner
+FROM caddy AS runner
 
-WORKDIR /app
+COPY --from=builder /app/out /usr/share/caddy
 
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/next.config.ts ./
-
-
-RUN npm install --production
-
-EXPOSE 3000
-
-CMD ["npm", "run", "start"]
+EXPOSE 80
