@@ -49,10 +49,7 @@ The second route is the one used by the front-end and uses the same mechanism as
 project ([Cloudflare, Privacy and k-Anonymity](https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/#cloudflareprivacyandkanonymity))
 to anonymize the passwords queried.
 
-The hash used is [`blake2b`](https://www.blake2.net/) with a 256-bit digest. False positives 
-should be virtually impossible. If possible, using a 128-bit digest should make the DB twice as 
-small and make the first load time faster. AFAICT the first load time is IO-bound on my machine 
-(Mostly writing the DB).
+The hash used is [`xxh128`](https://xxhash.com/) with a 128-bit digest.
 
 ### Front
 
