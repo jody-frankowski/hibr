@@ -78,7 +78,7 @@ function generateRandomPassword(
 }
 
 export default function PasswordGenerator() {
-  const [length, setLength] = useState<SliderValue>(8);
+  const [length, setLength] = useState<number>(8);
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeUppercase, setIncludeUppercase] = useState(true);
   const [includeSymbols, setIncludeSymbols] = useState(true);
@@ -97,7 +97,7 @@ export default function PasswordGenerator() {
       <div>Password Generator</div>
       <Snippet symbol="" className="w-full select-all">{password}</Snippet>
       <div className="flex flex-col w-full gap-4">
-        <Slider label="Length" value={length} onChange={setLength} minValue={4} maxValue={32} step={1} />
+        <Slider label="Length" value={length} onChange={setLength as (value: SliderValue) => void} minValue={4} maxValue={32} step={1} />
         <Checkbox isSelected={includeUppercase} onValueChange={setIncludeUppercase} >
           Include uppercase letters (A-Z)
         </Checkbox>
