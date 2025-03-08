@@ -23,6 +23,7 @@ services:
     environment:
       - BACK_HOST=hibr-api
       - FRONT_HOST=hibr-front
+      - PUBLIC_HOST=hibr.jody.page
     ports:
       - "8081:8081"
     volumes:
