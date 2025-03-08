@@ -55,8 +55,7 @@ docker run -p 8080:8080 haveibeenrocked-api
 Example:
 
 ```shell
-password="password"
-hash="$(python -c "import hashlib; print(hashlib.blake2b(b'${password}', digest_size=32).hexdigest())")"
+hash="$(echo -n password | xxh128sum | awk '{print $1}')"
 curl -s http://localhost:8080/api/v1/prefix/"${hash:0:4}" | grep -o "${hash}"
 ```
 
@@ -67,7 +66,6 @@ curl -s http://localhost:8080/api/v1/prefix/"${hash:0:4}" | grep -o "${hash}"
 Example:
 
 ```shell
-password="password"
-hash="$(python -c "import hashlib; print(hashlib.blake2b(b'${password}', digest_size=32).hexdigest())")"
+hash="$(echo -n password | xxh128sum | awk '{print $1}')"
 curl -sf http://localhost:8080/api/v1/hash/"${hash}" && echo Found || echo Not found
 ```
