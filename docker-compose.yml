@@ -21,8 +21,8 @@ services:
     image: caddy
     container_name: hibr-rp
     environment:
-      - BACK_HOST=hibr-api
-      - FRONT_HOST=hibr-front
+      - BACK_HOST=hibr-api:8080
+      - FRONT_HOST=hibr-front:80
       - PUBLIC_HOST=hibr.jody.page
     ports:
       - "8081:8081"
