@@ -6,8 +6,8 @@ http://localhost:8081 http://127.0.0.1:8081 http://[::1]:8081 http://{$PUBLIC_HO
 
 log
 
-reverse_proxy /api/* {$BACK_HOST:localhost}:8080
-reverse_proxy /* {$FRONT_HOST:localhost}:3000
+reverse_proxy /api/* {$BACK_HOST:localhost:8080}
+reverse_proxy /* {$FRONT_HOST:localhost:3000}
 
 header /api/* {
 	Cache-Control max-age=600
