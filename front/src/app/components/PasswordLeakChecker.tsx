@@ -165,6 +165,7 @@ export default function PasswordLeakChecker() {
 
   return (
     <div className="m-4 flex flex-col items-center">
+      <div>Password Leak Checker</div>
       <PasswordInput password={password} onChange={onPasswordChange}>
         <div>{matchStatus}</div>
       </PasswordInput>

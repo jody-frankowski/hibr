@@ -95,6 +95,7 @@ export default function PasswordGenerator() {
 
   return (
     <div className="m-4 flex flex-col items-center">
+      <div>Password Generator</div>
       <PasswordInput password={password} disabled={true} />
       <div className="flex flex-col w-auto">
         <Slider
