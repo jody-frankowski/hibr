@@ -8,10 +8,6 @@ docker compose up --build
 
 [https://localhost:8081](https://localhost:8081)
 
-The password leak checker and generator are on the homepage and also on their own pages:
-- [https://localhost:8081/PasswordGenerator](https://localhost:8081/PasswordGenerator)
-- [https://localhost:8081/PasswordLeakChecker](https://localhost:8081/PasswordLeakChecker)
-
 Local development instructions are in the READMEs of the subdirectories.
 
 ## Architecture
@@ -66,9 +62,7 @@ Typescript was used for its type safety over JavaScript.
 
 Next.js was chosen for its simplicity, quick setup, and previous knowledge of React.
 
-[mui/material-ui](https://github.com/mui/material-ui) was used for a slider component.
-An obvious improvement would be to use Material UI for the checkboxes and inputs fields as well.
-It's not because MUI was added last for the slider after the other components were done and tested.
+[HeroUI](https://www.heroui.com/) was used for the input components.
 
 ### Reverse Proxy
 

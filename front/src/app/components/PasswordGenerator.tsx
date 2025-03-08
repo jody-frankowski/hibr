@@ -1,9 +1,9 @@
 'use client';
 
-import CheckBox from '@/app/components/CheckBox';
-import PasswordInput from '@/app/components/PasswordInput';
 import { useState } from 'react';
-import { Slider } from '@mui/material';
+import { Checkbox } from '@heroui/checkbox';
+import { Slider, SliderValue } from '@heroui/slider';
+import { Snippet } from '@heroui/snippet';
 
 function passwordStatisfiesCharsets(
   password: string,
@@ -77,9 +77,8 @@ function generateRandomPassword(
   return password;
 }
 
-const defaultLength = 8;
 export default function PasswordGenerator() {
-  const [length, setLength] = useState<number>(defaultLength);
+  const [length, setLength] = useState<SliderValue>(8);
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeUppercase, setIncludeUppercase] = useState(true);
   const [includeSymbols, setIncludeSymbols] = useState(true);
@@ -94,34 +93,20 @@ export default function PasswordGenerator() {
   );
 
   return (
-    <div className="m-4 flex flex-col items-center">
+    <div className="flex flex-col items-center m-4 gap-4 w-96">
       <div>Password Generator</div>
-      <PasswordInput password={password} disabled={true} />
-      <div className="flex flex-col w-auto">
-        <Slider
-          style={{ width: 'auto' }}
-          className="mx-4 my-2"
-          name="Length"
-          min={4}
-          valueLabelDisplay="on"
-          value={length}
-          onChange={(_, val) => setLength(val as number)}
-        />
-        <CheckBox
-          name="Include uppercase letters (A-Z)"
-          checked={includeUppercase}
-          onChange={() => setIncludeUppercase(!includeUppercase)}
-        />
-        <CheckBox
-          name="Include numbers (0-9)"
-          checked={includeNumbers}
-          onChange={() => setIncludeNumbers(!includeNumbers)}
-        />
-        <CheckBox
-          name="Include symbols (!@#...)"
-          checked={includeSymbols}
-          onChange={() => setIncludeSymbols(!includeSymbols)}
-        />
+      <Snippet symbol="" className="w-full select-all">{password}</Snippet>
+      <div className="flex flex-col w-full gap-4">
+        <Slider label="Length" value={length} onChange={setLength} minValue={4} maxValue={32} step={1} />
+        <Checkbox isSelected={includeUppercase} onValueChange={setIncludeUppercase} >
+          Include uppercase letters (A-Z)
+        </Checkbox>
+        <Checkbox isSelected={includeNumbers} onValueChange={setIncludeNumbers} >
+          Include numbers (0-9)
+        </Checkbox>
+        <Checkbox isSelected={includeSymbols} onValueChange={setIncludeSymbols} >
+          Include symbols (!@#...)
+        </Checkbox>
       </div>
     </div>
   );
