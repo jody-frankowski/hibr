@@ -1,9 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import PasswordInput from '@/app/components/PasswordInput';
 import { xxhash128 } from 'hash-wasm';
-import { Alert } from '@mui/material';
+import { Alert } from '@heroui/alert';
+import { Input } from '@heroui/input';
+
+// Not exported by the module
+type alertColor = 'default' | 'success' | 'danger' | 'warning' | 'primary' | 'secondary' | undefined;
 
 type matchStatus = '' | '❌' | '😬' | '👍';
 
@@ -115,6 +118,18 @@ const rockYouTop100 = [
 export default function PasswordLeakChecker() {
   const [password, setPassword] = useState('');
   const [matchStatus, setMatchStatus] = useState<matchStatus>('');
+  const alertMessages = {
+    '': '',
+    '👍': '👍 Password not found (yet)',
+    '😬': '😬 Password has leaked',
+    '❌': '❌ Failed to contact server',
+  };
+  const alertColors = {
+    '': 'default',
+    '👍': 'success',
+    '😬': 'danger',
+    '❌': 'warning',
+  }
 
   const onPasswordChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
@@ -154,22 +169,13 @@ export default function PasswordLeakChecker() {
     }
   };
 
-  let alertMessage;
-  if (matchStatus === '❌') {
-    alertMessage = (
-      <Alert severity="warning">Could not contact the server</Alert>
-    );
-  } else {
-    alertMessage = null;
-  }
-
   return (
-    <div className="m-4 flex flex-col items-center">
+    <div className="m-4 gap-4 w-96 flex flex-col items-center" >
       <div>Password Leak Checker</div>
-      <PasswordInput password={password} onChange={onPasswordChange}>
-        <div>{matchStatus}</div>
-      </PasswordInput>
-      {alertMessage}
+      <Input placeholder="Password" value={password} onValueChange={setPassword} onChange={onPasswordChange} variant="bordered" size="lg" />
+      <Alert color={alertColors[matchStatus] as alertColor} style={{ visibility: matchStatus === '' ? 'hidden' : 'visible' }} className="w-auto">
+        {alertMessages[matchStatus]}
+      </Alert>
     </div>
   );
 }
