@@ -125,12 +125,14 @@ func (r *RockYou) loadData(rockYou io.Reader) error {
 	writeBatch := r.db.NewWriteBatch()
 	defer writeBatch.Cancel()
 
-	// FIXME Breaks early if a line is over 64k chars (it's not a problem with our rockyou.txt)
 	for scanner.Scan() {
 		password := scanner.Bytes()
 		if err := writeBatch.Set(hash(password), nil); err != nil {
 			return err
 		}
+	}
+	if err = scanner.Err(); err != nil {
+		return err
 	}
 
 	// Set the key that indicates that the data is loaded
