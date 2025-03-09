@@ -6,12 +6,9 @@ RUN adduser \
   --home "/nonexistent" \
   --shell "/sbin/nologin" \
   --no-create-home \
-  go-user
+  go
 
 RUN mkdir /db
-
-# NOTE Add fallback with https://weakpass.com/download/90/rockyou.txt.gz ?
-RUN wget https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt -O /tmp/rockyou.txt
 
 WORKDIR /app
 COPY . .
@@ -21,18 +18,17 @@ RUN CGO_ENABLED=0 go build -o /main .
 
 FROM scratch
 
-COPY --from=base /etc/passwd /etc/passwd
 COPY --from=base /etc/group /etc/group
+COPY --from=base /etc/passwd /etc/passwd
+COPY --from=base /etc/ssl /etc/ssl
 
+ENV ROCKYOU_URL=https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
 ENV ROCKYOU_DB_PATH=/db
-COPY --from=base --chown=go-user:go-user --chmod=700 /db/ /db/
+COPY --from=base --chown=go:go /db /db
 VOLUME /db
-
-ENV ROCKYOU_PATH=/tmp/rockyou.txt
-COPY --from=base --chown=go-user:go-user --chmod=700 /tmp/rockyou.txt /tmp/rockyou.txt
 
 COPY --from=base /main .
 
-USER go-user:go-user
+USER go:go
 EXPOSE 8080
 CMD ["./main"]

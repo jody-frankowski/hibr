@@ -4,10 +4,17 @@
 
 ### Local Development
 
-Download the rockyou list:
+Download the RockYou file:
 
 ```shell
 curl -LO https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
+```
+
+Or alternatively, set the RockYou file URL, which will be automatically downloaded and loaded for
+you:
+
+```shell
+export ROCKYOU_URL=https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
 ```
 
 Install the go dependencies:
