@@ -21,9 +21,6 @@ var (
 
 type RockYou struct {
 	db *badger.DB
-
-	// Prefix to avoid empty key errors and later potential collisions
-	prefix []byte
 }
 
 func GetDBPath() string {
@@ -68,7 +65,7 @@ func (r *RockYou) Matches(hashHex []byte) (bool, error) {
 		return false, err
 	}
 
-	_, err = txn.Get(append(r.prefix, hash...))
+	_, err = txn.Get(hash)
 	if err == nil {
 		return true, nil
 	} else if errors.Is(err, badger.ErrKeyNotFound) {
@@ -87,17 +84,16 @@ func (r *RockYou) PrefixSearch(prefixToSearchHex []byte) ([]string, error) {
 	it := txn.NewIterator(opts)
 	defer it.Close()
 
-	prefixToSearch, err := hex.DecodeString(string(prefixToSearchHex))
+	prefix, err := hex.DecodeString(string(prefixToSearchHex))
 	if err != nil {
 		return nil, err
 	}
 
 	hash := make([]byte, hashNbBytesHex)
 	hashes := make([]string, 0)
-	prefix := append(r.prefix, prefixToSearch...)
 	for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
 		key := it.Item().Key()
-		hex.Encode(hash, key[len(r.prefix):])
+		hex.Encode(hash, key)
 		hashes = append(hashes, string(hash))
 	}
 
@@ -115,8 +111,9 @@ func hash(password []byte) []byte {
 
 func (r *RockYou) loadData(rockYou io.Reader) error {
 	// Check if the data is already loaded
+	const statusKey = "IS_LOADED"
 	txn := r.db.NewTransaction(false)
-	_, err := txn.Get(append([]byte("LOADED_STATUS:"), r.prefix...))
+	_, err := txn.Get([]byte(statusKey))
 	txn.Discard()
 	if err == nil {
 		return nil
@@ -131,14 +128,13 @@ func (r *RockYou) loadData(rockYou io.Reader) error {
 	// FIXME Breaks early if a line is over 64k chars (it's not a problem with our rockyou.txt)
 	for scanner.Scan() {
 		password := scanner.Bytes()
-		key := append(r.prefix, hash(password)...)
-		if err := writeBatch.Set(key, nil); err != nil {
+		if err := writeBatch.Set(hash(password), nil); err != nil {
 			return err
 		}
 	}
 
 	// Set the key that indicates that the data is loaded
-	err = writeBatch.Set(append([]byte("LOADED_STATUS:"), r.prefix...), []byte{1})
+	err = writeBatch.Set([]byte(statusKey), []byte{1})
 	if err != nil {
 		return err
 	}
@@ -168,7 +164,7 @@ func New(rockYouFile io.Reader, dbPath string) (*RockYou, error) {
 		return nil, err
 	}
 
-	rockYou := RockYou{db, []byte("RY:")} // RY = RockYou
+	rockYou := RockYou{db}
 
 	err = rockYou.loadData(rockYouFile)
 	if err != nil {
