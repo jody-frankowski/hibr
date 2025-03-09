@@ -6,6 +6,9 @@ import (
 	"errors"
 	"haveibeenrocked/internal/matchers/rockyou"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/fasthttp/router"
@@ -32,6 +35,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error starting RockYou DB: %v", err)
 	}
+	defer func() {
+		if err = rockYou.Cleanup(); err != nil {
+			log.Fatalf("Error stopping RockYou DB: %v", err)
+		}
+	}()
 
 	log.Printf("DB started")
 
@@ -87,21 +95,23 @@ func main() {
 	r.GET("/api/v1/hash/{hash}", handleHash)
 	r.GET("/api/v1/prefix/{prefix}", handlePrefix)
 
-	const address = "0.0.0.0:8080"
-	log.Printf("Starting server on %s", address)
+	go func() {
+		const address = "0.0.0.0:8080"
+		log.Printf("Starting server on %s", address)
+		// 1s timeout (Actually responds in less than 1ms).
+		timeoutDuration := time.Duration(1000 * 1000 * 1000)
+		err = fasthttp.ListenAndServe(
+			address,
+			fasthttp.TimeoutHandler(r.Handler, timeoutDuration, "Timeout"),
+		)
+		if err != nil {
+			log.Fatalf("Error starting server: %v", err)
+		}
+	}()
 
-	// 1s timeout (Actually responds in less than 1ms).
-	timeoutDuration := time.Duration(1000 * 1000 * 1000)
-	err = fasthttp.ListenAndServe(
-		address,
-		fasthttp.TimeoutHandler(r.Handler, timeoutDuration, "Timeout"),
-	)
-	if err != nil {
-		log.Fatalf("Error starting server: %v", err)
-	}
-
-	// FIXME Never reached because we stop the server with SIGINT
-	if err = rockYou.Cleanup(); err != nil {
-		log.Fatalf("Error stopping RockYou DB: %v", err)
-	}
+	// Block until a signal is received
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	sig := <-sigChan
+	log.Printf("Received signal: %v. Shutting down...", sig)
 }
