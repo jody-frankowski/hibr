@@ -5,8 +5,10 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/dgraph-io/badger/v4"
@@ -31,7 +33,19 @@ func GetDBPath() string {
 	return dbPath
 }
 
-func GetRockYouFile() (*os.File, error) {
+func GetRockYouFile() (io.ReadCloser, error) {
+	rockYouURL := os.Getenv("ROCKYOU_URL")
+	if rockYouURL != "" {
+		res, err := http.Get(rockYouURL)
+		if err != nil {
+			return nil, err
+		} else if res.StatusCode != 200 {
+			return nil, fmt.Errorf("failed to download RockYou from %s", rockYouURL)
+		}
+
+		return res.Body, nil
+	}
+
 	return os.Open(getRockYouFilePath())
 }
 
