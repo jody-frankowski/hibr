@@ -2,8 +2,6 @@ services:
   back:
     container_name: hibr-back
     build: ./back
-    environment:
-      - DB_PATH=/db
     volumes:
       - db:/db
     networks:
