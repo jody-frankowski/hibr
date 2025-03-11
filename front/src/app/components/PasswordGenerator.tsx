@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Checkbox } from '@heroui/checkbox';
 import { Slider, SliderValue } from '@heroui/slider';
 import { Snippet } from '@heroui/snippet';
@@ -82,15 +82,20 @@ export default function PasswordGenerator() {
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeUppercase, setIncludeUppercase] = useState(true);
   const [includeSymbols, setIncludeSymbols] = useState(true);
+  // We set the password to an empty initial value in order to avoid hydration errors
+  const [password, setPassword] = useState<string>('');
 
-  const password = generateRandomPassword(
-    {
-      numbers: includeNumbers,
-      uppercase: includeUppercase,
-      symbols: includeSymbols,
-    },
-    length as number,
-  );
+  useEffect(() => {
+    const newPassword = generateRandomPassword(
+      {
+        numbers: includeNumbers,
+        uppercase: includeUppercase,
+        symbols: includeSymbols,
+      },
+      length as number,
+    );
+    setPassword(newPassword);
+  }, [length, includeNumbers, includeUppercase, includeSymbols]);
 
   const sliderColor = length >= 8 ? 'primary' : 'danger';
 
