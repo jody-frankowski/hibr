@@ -4,7 +4,7 @@ import { ThemeSwitcher } from '@/app/components/ThemeSwitcher';
 
 export default function Home() {
   return (
-    <div className="flex flex-wrap items-start">
+    <div className="flex flex-wrap justify-center">
       <PasswordLeakChecker />
       <PasswordGenerator />
       <div className="fixed bottom-10 right-10">
