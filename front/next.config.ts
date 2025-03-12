@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
   // Disable compression so that Caddy compresses requests with the more compact zstd
   compress: false,
   output: 'export',
+  experimental: {
+    inlineCss: true,
+  },
 };
 
 export default nextConfig;
