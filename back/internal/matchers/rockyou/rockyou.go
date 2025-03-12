@@ -144,12 +144,15 @@ func (r *RockYou) loadData(rockYou io.Reader) error {
 	writeBatch := r.db.NewWriteBatch()
 	defer writeBatch.Cancel()
 
+	nbHash := 0
 	for scanner.Scan() {
 		password := scanner.Bytes()
 		if err := writeBatch.Set(hash(password), nil); err != nil {
 			return err
 		}
+		nbHash++
 	}
+	log.Printf("# hashes inserted: %v", nbHash)
 	if err = scanner.Err(); err != nil {
 		return err
 	}
@@ -187,6 +190,7 @@ func New(rockYouFile io.Reader, dbPath string) (*RockYou, error) {
 
 	rockYou := RockYou{db}
 
+	log.Printf("Loading RockYou data if needed")
 	if err = rockYou.loadData(rockYouFile); err != nil {
 		return &rockYou, err
 	}
@@ -195,6 +199,7 @@ func New(rockYouFile io.Reader, dbPath string) (*RockYou, error) {
 		return &rockYou, err
 	}
 
+	log.Printf("Levels: %v", db.LevelsToString())
 	log.Printf("RockYou loaded")
 
 	return &rockYou, nil
