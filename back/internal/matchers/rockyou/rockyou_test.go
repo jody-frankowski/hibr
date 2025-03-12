@@ -7,6 +7,8 @@ import (
 	"os"
 	"slices"
 	"testing"
+
+	"github.com/dgraph-io/badger/v4"
 )
 
 var (
@@ -44,6 +46,25 @@ func Test(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Error loading RockYou DB: %v", err)
 	}
+
+	t.Run("Number Of Keys", func(t *testing.T) {
+		txn := rockYou.db.NewTransaction(false)
+		defer txn.Discard()
+		opts := badger.DefaultIteratorOptions
+		opts.PrefetchValues = false
+		it := txn.NewIterator(opts)
+		defer it.Close()
+
+		prefix := []byte{}
+		nbKeys := 0
+		for it.Seek(prefix); it.ValidForPrefix(prefix); it.Next() {
+			nbKeys++
+		}
+		const nbKeysExpected = 14344391
+		if nbKeys-1 != nbKeysExpected {
+			t.Fatalf("Found %v keys, expected %v", nbKeys, nbKeysExpected)
+		}
+	})
 
 	for name, test := range tests {
 		t.Run("Matches/"+name, func(t *testing.T) {
