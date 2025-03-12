@@ -19,6 +19,7 @@ import (
 var (
 	hashNbBytes    = 16
 	hashNbBytesHex = hashNbBytes * 2
+	isDevEnv       = os.Getenv("ENV") == "DEV"
 )
 
 type RockYou struct {
@@ -69,7 +70,9 @@ func (r *RockYou) Cleanup() error {
 
 // Matches returns true if the hash is found in the RockYou database.
 func (r *RockYou) Matches(hashHex []byte) (bool, error) {
-	log.Printf("Hash Query: %s", hashHex)
+	if isDevEnv {
+		log.Printf("Hash Query: %s", hashHex)
+	}
 
 	txn := r.db.NewTransaction(false)
 	defer txn.Discard()
@@ -111,7 +114,9 @@ func (r *RockYou) PrefixSearch(prefixToSearchHex []byte) ([]string, error) {
 		hashes = append(hashes, string(hash))
 	}
 
-	log.Printf("Hashes Found: %v %v", len(hashes), hashes)
+	if isDevEnv {
+		log.Printf("Hashes Found: %v %v", len(hashes), hashes)
+	}
 	return hashes, nil
 }
 
