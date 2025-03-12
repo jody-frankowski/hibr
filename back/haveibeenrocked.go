@@ -97,7 +97,7 @@ func main() {
 
 	go func() {
 		const address = "0.0.0.0:8080"
-		log.Printf("Starting server on %s", address)
+		log.Printf("Started server on %s", address)
 		// 1s timeout (Actually responds in less than 1ms).
 		timeoutDuration := time.Duration(1000 * 1000 * 1000)
 		err = fasthttp.ListenAndServe(
