@@ -185,6 +185,11 @@ func New(rockYouFile io.Reader, dbPath string) (*RockYou, error) {
 	if err = rockYou.loadData(rockYouFile); err != nil {
 		return &rockYou, err
 	}
+
+	if err = db.Sync(); err != nil {
+		return &rockYou, err
+	}
+
 	log.Printf("RockYou loaded")
 
 	return &rockYou, nil
