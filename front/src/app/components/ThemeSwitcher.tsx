@@ -8,7 +8,7 @@ export function ThemeSwitcher() {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <Button isIconOnly onPress={() => setTheme(resolvedTheme === 'light' ? 'dark' : 'light')}>
+    <Button isIconOnly onPress={() => setTheme(resolvedTheme === 'light' ? 'dark' : 'light')} title="Toggle Dark/Light Mode">
       <MoonFilledIcon />
     </Button>
   );
