@@ -6,7 +6,14 @@ import { Alert } from '@heroui/alert';
 import { Input } from '@heroui/input';
 
 // Not exported by the module
-type alertColor = 'default' | 'success' | 'danger' | 'warning' | 'primary' | 'secondary' | undefined;
+type alertColor =
+  'default'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'primary'
+  | 'secondary'
+  | undefined;
 
 type matchStatus = '' | '❌' | '😬' | '👍';
 
@@ -129,7 +136,7 @@ export default function PasswordLeakChecker() {
     '👍': 'success',
     '😬': 'danger',
     '❌': 'warning',
-  }
+  };
 
   const onPasswordChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
@@ -172,8 +179,10 @@ export default function PasswordLeakChecker() {
   return (
     <div className="flex flex-col items-center m-4 gap-4 min-w-96">
       <div>Password Leak Checker</div>
-      <Input placeholder="Password" value={password} onValueChange={setPassword} onChange={onPasswordChange} variant="bordered" size="lg" />
-      <Alert color={alertColors[matchStatus] as alertColor} style={{ visibility: matchStatus === '' ? 'hidden' : 'visible' }} className="w-auto">
+      <Input placeholder="Password" value={password} onValueChange={setPassword}
+             onChange={onPasswordChange} variant="bordered" size="lg" />
+      <Alert color={alertColors[matchStatus] as alertColor}
+             style={{ visibility: matchStatus === '' ? 'hidden' : 'visible' }} className="w-auto">
         {alertMessages[matchStatus]}
       </Alert>
     </div>
