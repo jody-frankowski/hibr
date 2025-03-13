@@ -9,9 +9,8 @@ log
 reverse_proxy /api/* {$BACK_HOST:localhost:8080}
 reverse_proxy /* {$FRONT_HOST:localhost:3000}
 
-header /api/* {
-	Cache-Control max-age=600
-}
+header /api/*          Cache-Control max-age=600
+header /_next/static/* Cache-Control max-age=60
 
 encode {
 	zstd best
