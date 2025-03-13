@@ -170,7 +170,7 @@ export default function PasswordLeakChecker() {
   };
 
   return (
-    <div className="m-4 gap-4 w-96 flex flex-col items-center" >
+    <div className="flex flex-col items-center m-4 gap-4 min-w-96">
       <div>Password Leak Checker</div>
       <Input placeholder="Password" value={password} onValueChange={setPassword} onChange={onPasswordChange} variant="bordered" size="lg" />
       <Alert color={alertColors[matchStatus] as alertColor} style={{ visibility: matchStatus === '' ? 'hidden' : 'visible' }} className="w-auto">

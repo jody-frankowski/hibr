@@ -100,7 +100,7 @@ export default function PasswordGenerator() {
   const sliderColor = length >= 8 ? 'primary' : 'danger';
 
   return (
-    <div className="flex flex-col items-center m-4 gap-4 w-96">
+    <div className="flex flex-col items-center m-4 gap-4 min-w-96">
       <div>Password Generator</div>
       <Snippet symbol="" className="w-full select-all">{password}</Snippet>
       <div className="flex flex-col w-full gap-4">
