@@ -21,7 +21,7 @@ services:
     environment:
       - BACK_HOST=hibr-back:8080
       - FRONT_HOST=hibr-front:80
-      - PUBLIC_HOST=hibr.jody.page
+      - PUBLIC_HOST=${PUBLIC_HOST}
     ports:
       - "8081:8081"
     volumes:
@@ -30,6 +30,16 @@ services:
     networks:
       - app-network
     restart: unless-stopped
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: hibr-tunnel
+    command: tunnel run --token $TOKEN --http-host-header localhost:8081 --url http://rp:8081 hibr
+    depends_on: [back, front, rp]
+    networks:
+      - app-network
+    restart: unless-stopped
+    profiles: [prod]
 
 volumes:
   db:
