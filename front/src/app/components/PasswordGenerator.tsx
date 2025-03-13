@@ -39,10 +39,10 @@ type CharsetIncluded = {
 };
 
 function getCharsets({
-  numbers: numbers,
-  symbols: symbols,
-  uppercase: uppercase,
-}: CharsetIncluded): Charset[] {
+                       numbers: numbers,
+                       symbols: symbols,
+                       uppercase: uppercase,
+                     }: CharsetIncluded): Charset[] {
   const currentCharsets: Charset[] = [charsets.lowercase];
   if (uppercase) currentCharsets.push(charsets.uppercase);
   if (symbols) currentCharsets.push(charsets.symbols);
@@ -104,14 +104,16 @@ export default function PasswordGenerator() {
       <div>Password Generator</div>
       <Snippet symbol="" className="w-full select-all">{password}</Snippet>
       <div className="flex flex-col w-full gap-4">
-        <Checkbox isSelected={includeUppercase} onValueChange={setIncludeUppercase} >
-        <Slider label="Length" value={length} color={sliderColor} onChange={setLength as (value: SliderValue) => void} minValue={4} maxValue={32} step={1} size="sm" showTooltip/>
+        <Slider label="Length" value={length} color={sliderColor}
+                onChange={setLength as (value: SliderValue) => void} minValue={4} maxValue={32}
+                step={1} size="sm" showTooltip />
+        <Checkbox isSelected={includeUppercase} onValueChange={setIncludeUppercase}>
           Include uppercase letters (A-Z)
         </Checkbox>
-        <Checkbox isSelected={includeNumbers} onValueChange={setIncludeNumbers} >
+        <Checkbox isSelected={includeNumbers} onValueChange={setIncludeNumbers}>
           Include numbers (0-9)
         </Checkbox>
-        <Checkbox isSelected={includeSymbols} onValueChange={setIncludeSymbols} >
+        <Checkbox isSelected={includeSymbols} onValueChange={setIncludeSymbols}>
           Include symbols (!@#...)
         </Checkbox>
       </div>
