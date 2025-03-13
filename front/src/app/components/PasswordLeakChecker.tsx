@@ -15,7 +15,7 @@ type alertColor =
   | 'secondary'
   | undefined;
 
-type matchStatus = '' | '❌' | '😬' | '👍';
+type matchStatus = 'MatchInit' | 'MatchServerError' | 'MatchFound' | 'MatchNotFound';
 
 // Top 100 passwords in RockYou according to the more realistic SecLists by OWASP
 // https://github.com/danielmiessler/SecLists/blob/fc9cbdfe8f8e5ae0505cd781f6a243239ddddd3f/Passwords/Common-Credentials/10-million-password-list-top-10000.txt#L1
@@ -124,18 +124,18 @@ const rockYouTop100 = [
 
 export default function PasswordLeakChecker() {
   const [password, setPassword] = useState('');
-  const [matchStatus, setMatchStatus] = useState<matchStatus>('');
   const alertMessages = {
-    '': '',
-    '👍': '👍 Password not found (yet)',
-    '😬': '😬 Password has leaked',
-    '❌': '❌ Failed to contact server',
+  const [matchStatus, setMatchStatus] = useState<matchStatus>('MatchInit');
+    'MatchInit': '',
+    'MatchNotFound': '👍 Password not found (yet)',
+    'MatchFound': '😬 Password has leaked',
+    'MatchServerError': '❌ Failed to contact server',
   };
   const alertColors = {
-    '': 'default',
-    '👍': 'success',
-    '😬': 'danger',
-    '❌': 'warning',
+    'MatchInit': 'default',
+    'MatchNotFound': 'success',
+    'MatchFound': 'danger',
+    'MatchServerError': 'warning',
   };
 
   const onPasswordChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,13 +143,13 @@ export default function PasswordLeakChecker() {
     setPassword(newPassword);
 
     if (newPassword === '') {
-      setMatchStatus('');
+      setMatchStatus('MatchInit');
       return;
     }
 
     if (rockYouTop100.includes(newPassword)) {
       console.log(`rockYouTop100 hit: ${newPassword}`);
-      setMatchStatus('😬');
+      setMatchStatus('MatchFound');
       return;
     }
 
@@ -163,16 +163,16 @@ export default function PasswordLeakChecker() {
       if (res.status === 200) {
         const hashes = await res.json();
         if (hashes.includes(hashedPassword)) {
-          setMatchStatus('😬');
+          setMatchStatus('MatchFound');
         } else {
-          setMatchStatus('👍');
+          setMatchStatus('MatchNotFound');
         }
       } else {
-        setMatchStatus('❌');
+        setMatchStatus('MatchServerError');
       }
     } catch (e) {
       console.error('Failed to fetch password information:', e);
-      setMatchStatus('❌');
+      setMatchStatus('MatchServerError');
     }
   };
 
@@ -182,7 +182,8 @@ export default function PasswordLeakChecker() {
       <Input placeholder="Password" value={password} onValueChange={setPassword}
              onChange={onPasswordChange} variant="bordered" size="lg" />
       <Alert color={alertColors[matchStatus] as alertColor}
-             style={{ visibility: matchStatus === '' ? 'hidden' : 'visible' }} className="w-auto">
+             style={{ visibility: matchStatus === 'MatchInit' ? 'hidden' : 'visible' }}
+             className="w-auto">
         {alertMessages[matchStatus]}
       </Alert>
     </div>
