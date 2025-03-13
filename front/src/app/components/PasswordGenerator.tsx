@@ -104,8 +104,8 @@ export default function PasswordGenerator() {
       <div>Password Generator</div>
       <Snippet symbol="" className="w-full select-all">{password}</Snippet>
       <div className="flex flex-col w-full gap-4">
-        <Slider label="Length" value={length} color={sliderColor} onChange={setLength as (value: SliderValue) => void} minValue={4} maxValue={32} step={1} size="sm"/>
         <Checkbox isSelected={includeUppercase} onValueChange={setIncludeUppercase} >
+        <Slider label="Length" value={length} color={sliderColor} onChange={setLength as (value: SliderValue) => void} minValue={4} maxValue={32} step={1} size="sm" showTooltip/>
           Include uppercase letters (A-Z)
         </Checkbox>
         <Checkbox isSelected={includeNumbers} onValueChange={setIncludeNumbers} >
