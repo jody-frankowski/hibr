@@ -124,14 +124,14 @@ const rockYouTop100 = [
 
 export default function PasswordLeakChecker() {
   const [password, setPassword] = useState('');
-  const alertMessages = {
   const [matchStatus, setMatchStatus] = useState<matchStatus>('MatchInit');
+  const alertMessages: Record<matchStatus, string> = {
     'MatchInit': '',
     'MatchNotFound': '👍 Password not found (yet)',
     'MatchFound': '😬 Password has leaked',
     'MatchServerError': '❌ Failed to contact server',
   };
-  const alertColors = {
+  const alertColors: Record<matchStatus, string> = {
     'MatchInit': 'default',
     'MatchNotFound': 'success',
     'MatchFound': 'danger',
