@@ -10,7 +10,7 @@ export function ThemeSwitcher() {
   return (
     <Button isIconOnly onPress={() => setTheme(resolvedTheme === 'light' ? 'dark' : 'light')}
             title="Toggle Dark/Light Mode" className="bg-transparent">
-      <MoonFilledIcon />
+      <MoonFilledIcon style={{ scale: 2 }} />
     </Button>
   );
 }
