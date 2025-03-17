@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex flex-wrap items-start justify-center">
       <PasswordLeakChecker />
       <PasswordGenerator />
-      <div className="fixed bottom-10 right-10 flex">
+      <div className="fixed bottom-10 right-10 flex gap-1">
         <GitHubLink />
         <ThemeSwitcher />
       </div>
