@@ -1,7 +1,5 @@
 'use client';
 
-import { Button } from '@heroui/react';
-
 const GitHubIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" id="GitHubIcon">
@@ -14,10 +12,8 @@ const GitHubIcon = () => {
 
 export function GitHubLink() {
   return (
-    <a href="https://github.com/jody-frankowski/hibr/">
-      <Button isIconOnly title="GitHub" className="bg-transparent">
-        <GitHubIcon />
-      </Button>
+    <a href="https://github.com/jody-frankowski/hibr/" className="h-10 w-10" title="GitHub Link">
+      <GitHubIcon />
     </a>
   );
 }
