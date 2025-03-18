@@ -1,9 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { xxhash128 } from 'hash-wasm';
 import { Alert } from '@heroui/alert';
+import { Button } from '@heroui/button';
+import { InfoIcon } from '@heroui/shared-icons';
 import { Input } from '@heroui/input';
+import { Link } from '@heroui/link';
+import { Tooltip } from '@heroui/tooltip';
 
 // Not exported by the module
 type alertColor =
@@ -123,6 +127,12 @@ const rockYouTop100 = [
 ];
 
 export default function PasswordLeakChecker() {
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const isTooltipOpenRef = useRef(isTooltipOpen);
+  useEffect(() => {
+    isTooltipOpenRef.current = isTooltipOpen;
+  }, [isTooltipOpen]);
+
   const [password, setPassword] = useState('');
   const [matchStatus, setMatchStatus] = useState<matchStatus>('MatchInit');
   const alertMessages: Record<matchStatus, string> = {
@@ -178,7 +188,40 @@ export default function PasswordLeakChecker() {
 
   return (
     <div className="flex flex-col items-center m-4 gap-4 min-w-96">
-      <div>Password Leak Checker</div>
+      <div className="flex items-center gap-4">
+        <div>Password Leak Checker</div>
+        <Tooltip content={
+          <div>
+            <Link isExternal underline="hover"
+                  href="https://en.wikipedia.org/wiki/K-anonymity">Anonymously</Link> check if your
+            password has leaked in the <Link isExternal underline="hover"
+                                             href="https://en.wikipedia.org/wiki/RockYou#Data_breach">
+            RockYou leak
+          </Link>
+          </div>
+        }
+                 isOpen={isTooltipOpen}
+        >
+          <Button
+            title="Informations" isIconOnly variant="light" color="primary" size="lg"
+            onPress={() => {
+              setIsTooltipOpen(!isTooltipOpen);
+              setTimeout(() => {
+                if (!isTooltipOpen) {
+                  document.addEventListener('click', () => {
+                    if (isTooltipOpenRef.current) {
+                      setIsTooltipOpen(false);
+                    }
+                  }, { once: true });
+                }
+              }, 10);
+            }}
+            className="h-auto w-auto min-h-auto min-w-1 hover:!bg-transparent"
+          >
+            <InfoIcon />
+          </Button>
+        </Tooltip>
+      </div>
       <Input placeholder="Password" value={password} onValueChange={setPassword}
              onChange={onPasswordChange} variant="bordered" size="lg" />
       <Alert color={alertColors[matchStatus] as alertColor}
