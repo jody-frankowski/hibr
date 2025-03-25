@@ -1,5 +1,14 @@
 import type { Config } from 'tailwindcss';
 import { heroui } from '@heroui/react';
+import { semanticColors } from '@heroui/theme';
+
+// Override to improve contrast
+const darkColors = semanticColors.dark;
+const lightColors = semanticColors.light;
+if (typeof darkColors.foreground !== 'string' && typeof lightColors.foreground !== 'string') {
+  darkColors.foreground.DEFAULT = '#fff';
+  lightColors.foreground.DEFAULT = '#000';
+}
 
 export default {
   content: [
@@ -11,5 +20,14 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [heroui()],
+  plugins: [heroui({
+    themes: {
+      dark: {
+        colors: darkColors,
+      },
+      light: {
+        colors: lightColors,
+      },
+    },
+  })],
 } satisfies Config;
