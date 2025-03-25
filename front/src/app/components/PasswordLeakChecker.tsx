@@ -218,7 +218,7 @@ export default function PasswordLeakChecker() {
             }}
             className="h-auto w-auto min-h-auto min-w-1 hover:!bg-transparent"
           >
-            <InfoIcon />
+            <InfoIcon height="1.25rem" width="1.25rem" />
           </Button>
         </Tooltip>
       </div>
