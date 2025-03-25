@@ -1,14 +1,14 @@
 'use client';
 
 import { HeroUIProvider } from '@heroui/react';
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { ThemeScript } from '@/app/components/ThemeSwitcher';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <HeroUIProvider>
-      <NextThemesProvider attribute="class">
+      <ThemeScript>
         {children}
-      </NextThemesProvider>
+      </ThemeScript>
     </HeroUIProvider>
   );
 }
