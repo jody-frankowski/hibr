@@ -4,6 +4,16 @@ import { Button } from '@heroui/react';
 import { MoonFilledIcon, SunFilledIcon } from '@heroui/shared-icons';
 import React, { useEffect, useReducer, useState } from 'react';
 
+const iconStyle = { height: '2rem', width: '2rem' };
+const prefersDarkMediaQuery = '(prefers-color-scheme: dark)';
+
+type theme = 'dark' | 'light';
+type themeSource = 'system' | 'user';
+// Toggle is the only action supported, but we still add it in the "payload" to better convey
+// the action's meaning
+type themeReducerAction = { from: themeSource, action: 'toggle' };
+type themeState = { from: themeSource, theme: theme };
+
 export const ThemeScript = ({ children }: { children: React.ReactNode }) => {
   const setSystemTheme = () => {
     const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -21,57 +31,48 @@ export const ThemeScript = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-function setTheme(theme: 'dark' | 'light') {
-  if (typeof window === 'undefined') return;
+
+const oppositeTheme = (theme: theme): theme => {
+  return theme === 'dark' ? 'light' : 'dark';
+};
+
+function setTheme(theme: theme) {
+  if (typeof document === 'undefined') return;
 
   const htmlEl = document.documentElement;
-  htmlEl.classList.remove(theme === 'dark' ? 'light' : 'dark');
+  htmlEl.classList.remove(oppositeTheme(theme));
   htmlEl.classList.add(theme);
   htmlEl.style.colorScheme = theme;
 }
 
-const systemWantsDark = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+const getSystemTheme = (): theme => {
+  if (typeof document === 'undefined') return 'light';
+
+  return window.matchMedia(prefersDarkMediaQuery).matches ? 'dark' : 'light';
 };
 
-const themeReducer = (prevState: themeState, from: 'system' | 'user') => {
-  const newState = { ...prevState };
-
-  if (from === 'user') {
-    newState.userWantsDark = prevState.userForced ? !prevState.userWantsDark : !prevState.systemWantsDark;
-    newState.userForced = true;
-  } else {
-    newState.systemWantsDark = !prevState.systemWantsDark;
+const themeReducer = (state: themeState, action: themeReducerAction) => {
+  if (action.from === 'user'
+    || (action.from === 'system' && state.from !== 'user')) {
+    return { from: action.from, theme: oppositeTheme(state.theme) };
   }
-  newState.resultIsDark = (newState.userForced ? newState.userWantsDark : newState.systemWantsDark);
-
-  return newState;
+  return state;
 };
-
-interface themeState {
-  systemWantsDark: boolean;
-  userForced: boolean;
-  userWantsDark: boolean;
-  resultIsDark: boolean;
-}
 
 export const ThemeSwitcher = () => {
-  const [themeState, toggleDarkMode] = useReducer(themeReducer, {
-    systemWantsDark: systemWantsDark(),
-    userForced: false,
-    userWantsDark: false,
-    resultIsDark: systemWantsDark(),
+  const [themeState, toggleTheme] = useReducer(themeReducer, {
+    from: 'system',
+    theme: getSystemTheme(),
   });
   useEffect(() => {
     const mediaQueryHandler = () => {
-      toggleDarkMode('system');
+      toggleTheme({ from: 'system', action: 'toggle' });
     };
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia(prefersDarkMediaQuery);
 
-    media.addEventListener('change', mediaQueryHandler);
+    mediaQuery.addEventListener('change', mediaQueryHandler);
     return () => {
-      media.removeEventListener('change', mediaQueryHandler);
+      mediaQuery.removeEventListener('change', mediaQueryHandler);
     };
   }, []);
 
@@ -85,14 +86,13 @@ export const ThemeSwitcher = () => {
     );
   }
 
-  setTheme(themeState.resultIsDark ? 'dark' : 'light');
+  setTheme(themeState.theme);
 
-  const iconStyle = { height: '2rem', width: '2rem' };
-  const icon = themeState.resultIsDark ?
+  const icon = themeState.theme === 'dark' ?
     <SunFilledIcon style={iconStyle} /> : <MoonFilledIcon style={iconStyle} />;
 
   return (
-    <Button isIconOnly onPress={() => toggleDarkMode('user')}
+    <Button isIconOnly onPress={() => toggleTheme({ from: 'user', action: 'toggle' })}
             title="Toggle Dark/Light Mode" className="bg-transparent">
       {icon}
     </Button>
