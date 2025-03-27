@@ -3,12 +3,20 @@ import { heroui } from '@heroui/react';
 import { semanticColors } from '@heroui/theme';
 
 // Override to improve contrast
-const darkColors = semanticColors.dark;
-const lightColors = semanticColors.light;
-if (typeof darkColors.foreground !== 'string' && typeof lightColors.foreground !== 'string') {
-  darkColors.foreground.DEFAULT = '#fff';
-  lightColors.foreground.DEFAULT = '#000';
-}
+const darkColors = {
+  ...semanticColors.dark,
+  foreground: {
+    ...(typeof semanticColors.dark.foreground === 'string' ? {} : semanticColors.dark.foreground),
+    DEFAULT: '#fff',
+  },
+};
+const lightColors = {
+  ...semanticColors.light,
+  foreground: {
+    ...(typeof semanticColors.light.foreground === 'string' ? {} : semanticColors.light.foreground),
+    DEFAULT: '#000',
+  },
+};
 
 export default {
   content: [
