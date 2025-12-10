@@ -4,10 +4,11 @@
 
 ### Local Development
 
-Download the RockYou file:
+Download the RockYou file and set an environment variable to its location:
 
 ```shell
 curl -LO https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
+export ROCKYOU_PATH="$(pwd)/rockyou.txt"
 ```
 
 Or alternatively, set the RockYou file URL, which will be automatically downloaded and loaded for
