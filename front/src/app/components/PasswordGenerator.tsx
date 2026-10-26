@@ -1,9 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Checkbox } from '@heroui/checkbox';
-import { Slider, SliderValue } from '@heroui/slider';
-import { Snippet } from '@heroui/snippet';
+import { Checkbox, Slider, SliderValue, Snippet } from '@heroui/react';
 
 function passwordStatisfiesCharsets(
   password: string,

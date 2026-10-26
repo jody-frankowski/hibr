@@ -2,12 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { xxhash128 } from 'hash-wasm';
-import { Alert } from '@heroui/alert';
-import { Button } from '@heroui/button';
+import { Alert, Button, Input, Link, Tooltip } from '@heroui/react';
 import { InfoIcon } from '@heroui/shared-icons';
-import { Input } from '@heroui/input';
-import { Link } from '@heroui/link';
-import { Tooltip } from '@heroui/tooltip';
+
 
 // Not exported by the module
 type alertColor =
@@ -216,7 +213,7 @@ export default function PasswordLeakChecker() {
                 }
               }, 10);
             }}
-            className="h-auto w-auto min-h-auto min-w-1 hover:!bg-transparent"
+            className="h-auto w-auto min-h-auto min-w-1 hover:bg-transparent!"
           >
             <InfoIcon height="1.25rem" width="1.25rem" />
           </Button>

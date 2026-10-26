@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss';
-import { heroui } from '@heroui/react';
-import { semanticColors } from '@heroui/theme';
+import { heroui, semanticColors } from '@heroui/react';
 
 // Override to improve contrast
 const darkColors = {
